@@ -40,42 +40,55 @@ const PREGUNTAS = [
     "explicacion": "Si existe la CLI y el agente tiene tu terminal, la CLI basta. El MCP sirve donde no hay CLI."
   },
   {
-    "id": "taller-claude-md-sesion",
+    "id": "taller-claude-md-cuando-carga",
     "tema": "Taller",
-    "pregunta": "¿Cuándo lee Claude Code el CLAUDE.md de tu proyecto?",
+    "pregunta": "¿Cuándo entra el CLAUDE.md del proyecto al contexto de Claude Code?",
     "opciones": [
       "Solo cuando lo mencionas en el prompt",
-      "Una vez al instalarlo, y lo guarda para siempre",
-      "Al iniciar cada sesión, y queda en el contexto",
-      "Solo cuando una skill le pide leerlo"
+      "Solo en la primera sesión del proyecto",
+      "Al iniciar cada sesión, completo",
+      "Cuando Claude decide leerlo con una herramienta"
     ],
     "correcta": 2,
-    "explicacion": "Se carga al iniciar cada sesión y viaja en el contexto. No hace falta mencionarlo ni pedírselo a una skill."
+    "explicacion": "CLAUDE.md se carga completo al iniciar cada sesión. Por eso conviene que sea corto: ocupa contexto siempre."
   },
   {
     "id": "taller-que-es-mcp",
     "tema": "Taller",
-    "pregunta": "¿Qué es un servidor MCP?",
+    "pregunta": "¿Qué es un servidor MCP para un agente como Claude Code?",
     "opciones": [
-      "Un modelo más pequeño que ayuda a Claude",
-      "Un archivo de instrucciones que se lee al iniciar",
-      "Un script que corre antes de cada acción",
-      "Un programa que le da herramientas al agente"
+      "Un modelo más pequeño que ayuda al principal",
+      "Una memoria donde el agente guarda conversaciones",
+      "Un ajuste que reentrena el modelo con tus datos",
+      "Un programa que le expone herramientas por un protocolo"
     ],
     "correcta": 3,
-    "explicacion": "Un servidor MCP expone herramientas con un protocolo estándar. No es un modelo, ni un CLAUDE.md, ni un hook."
+    "explicacion": "MCP es un protocolo: el servidor ofrece herramientas y el agente las llama. No cambia el modelo ni le da memoria."
   },
   {
     "id": "taller-hook-vs-instruccion",
     "tema": "Taller",
-    "pregunta": "¿Qué hace distinto a un hook de una instrucción en CLAUDE.md?",
+    "pregunta": "¿Qué ganas al validar preguntas.js con un hook en vez de pedirlo en CLAUDE.md?",
     "opciones": [
-      "El harness lo ejecuta siempre, sin depender del modelo",
-      "El modelo decide si lo ejecuta según el contexto",
-      "Es una sugerencia que el modelo puede ignorar",
-      "Solo se ejecuta cuando escribes /hooks"
+      "El harness lo corre siempre, aunque el modelo lo olvide",
+      "El modelo entiende mejor qué debe validar",
+      "La validación queda guardada en su memoria",
+      "Claude decide en cada caso si conviene correrlo"
     ],
     "correcta": 0,
-    "explicacion": "El harness corre el hook en cada evento configurado. Una instrucción en CLAUDE.md depende de que el modelo la siga."
+    "explicacion": "Un hook lo ejecuta el harness en cada evento. Una instrucción en CLAUDE.md depende de que el modelo la siga."
+  },
+  {
+    "id": "taller-cuando-corre-posttooluse",
+    "tema": "Taller",
+    "pregunta": "¿Cuándo se ejecuta un hook PostToolUse en Claude Code?",
+    "opciones": [
+      "Antes de que el modelo lea tu mensaje",
+      "Justo después de que una herramienta termina",
+      "Solo cuando cierras la sesión",
+      "Cada vez que el modelo piensa una respuesta"
+    ],
+    "correcta": 1,
+    "explicacion": "PostToolUse corre cuando una herramienta termina, por ejemplo tras un Edit. Así puede validar el resultado al instante."
   }
 ];

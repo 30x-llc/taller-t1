@@ -1,32 +1,32 @@
-// Lógica del quiz. Lee PREGUNTAS de preguntas.js (cargado antes con <script> clásico).
+// Lógica del quiz. Lee la constante global PREGUNTAS de preguntas.js.
 (function () {
   "use strict";
 
   var el = {
     quiz: document.getElementById("quiz"),
     resultado: document.getElementById("resultado"),
+    barra: document.getElementById("barra-progreso"),
+    progreso: document.querySelector(".progreso"),
     tema: document.getElementById("tema"),
     contador: document.getElementById("contador"),
-    barra: document.getElementById("barra-progreso"),
-    relleno: document.getElementById("relleno"),
     pregunta: document.getElementById("pregunta"),
     opciones: document.getElementById("opciones"),
     explicacion: document.getElementById("explicacion"),
     siguiente: document.getElementById("siguiente"),
     puntaje: document.getElementById("puntaje"),
-    mensaje: document.getElementById("mensaje"),
+    mensajeFinal: document.getElementById("mensaje-final"),
     reiniciar: document.getElementById("reiniciar")
   };
 
-  var total = typeof PREGUNTAS === "undefined" ? 0 : PREGUNTAS.length;
+  var total = PREGUNTAS.length;
   var actual = 0;
   var aciertos = 0;
   var respondida = false;
 
   function actualizarProgreso(completadas) {
-    el.relleno.style.width = (completadas / total) * 100 + "%";
-    el.barra.setAttribute("aria-valuemax", String(total));
-    el.barra.setAttribute("aria-valuenow", String(completadas));
+    var porcentaje = total ? Math.round((completadas / total) * 100) : 0;
+    el.barra.style.width = porcentaje + "%";
+    el.progreso.setAttribute("aria-valuenow", String(porcentaje));
   }
 
   function mostrarPregunta() {
@@ -40,18 +40,19 @@
     el.explicacion.textContent = "";
     el.siguiente.hidden = true;
     el.siguiente.textContent = actual === total - 1 ? "Ver resultado" : "Siguiente";
-    actualizarProgreso(actual);
 
     el.opciones.textContent = "";
-    p.opciones.forEach(function (texto, i) {
+    p.opciones.forEach(function (texto, indice) {
       var boton = document.createElement("button");
       boton.type = "button";
       boton.className = "opcion";
-      boton.setAttribute("data-indice", String(i));
+      boton.setAttribute("data-indice", String(indice));
       boton.textContent = texto;
-      boton.addEventListener("click", function () { responder(i); });
+      boton.addEventListener("click", function () { responder(indice); });
       el.opciones.appendChild(boton);
     });
+
+    actualizarProgreso(actual);
   }
 
   function responder(elegida) {
@@ -63,16 +64,16 @@
     if (acerto) aciertos++;
 
     var botones = el.opciones.querySelectorAll(".opcion");
-    botones.forEach(function (b, i) {
-      b.disabled = true;
-      if (i === p.correcta) b.classList.add("correcta");
-      else if (i === elegida) b.classList.add("incorrecta");
+    botones.forEach(function (boton, indice) {
+      boton.disabled = true;
+      if (indice === p.correcta) boton.classList.add("correcta");
+      else if (indice === elegida) boton.classList.add("incorrecta");
     });
 
+    var etiqueta = document.createElement("strong");
+    etiqueta.textContent = acerto ? "Correcto. " : "Incorrecto. ";
     el.explicacion.textContent = "";
-    var veredicto = document.createElement("strong");
-    veredicto.textContent = acerto ? "Correcto. " : "Incorrecto. ";
-    el.explicacion.appendChild(veredicto);
+    el.explicacion.appendChild(etiqueta);
     el.explicacion.appendChild(document.createTextNode(p.explicacion));
     el.explicacion.hidden = false;
 
@@ -91,11 +92,12 @@
     el.quiz.hidden = true;
     el.resultado.hidden = false;
     el.puntaje.textContent = aciertos + " de " + total;
-    var proporcion = aciertos / total;
-    el.mensaje.textContent =
-      proporcion === 1 ? "Respondiste todo bien. Dominas los conceptos del curso." :
-      proporcion >= 0.6 ? "Vas bien. Repasa las preguntas que fallaste y vuelve a intentarlo." :
-      "Te conviene repasar N1, N2 y el Taller antes de volver a jugar.";
+
+    var proporcion = total ? aciertos / total : 0;
+    if (proporcion === 1) el.mensajeFinal.textContent = "Respondiste todo bien. Dominas los conceptos del repaso.";
+    else if (proporcion >= 0.7) el.mensajeFinal.textContent = "Muy bien. Repasa las preguntas que fallaste y vuelve a intentarlo.";
+    else el.mensajeFinal.textContent = "Vale la pena repasar los temas que fallaste. Juega de nuevo cuando quieras.";
+
     el.reiniciar.focus();
   }
 
@@ -110,8 +112,8 @@
   el.siguiente.addEventListener("click", siguiente);
   el.reiniciar.addEventListener("click", reiniciar);
 
-  if (!total) {
-    el.pregunta.textContent = "No hay preguntas cargadas. Revisa preguntas.js.";
+  if (total === 0) {
+    el.pregunta.textContent = "Todavía no hay preguntas en preguntas.js.";
     return;
   }
   mostrarPregunta();

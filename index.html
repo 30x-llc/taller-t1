@@ -1,24 +1,24 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quiz de repaso · AI for Developers</title>
+  <link rel="icon" href="marca/logo-30x.svg" type="image/svg+xml">
   <link rel="stylesheet" href="marca/marca.css">
   <style>
-    .encabezado { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+    /* Solo disposición; los colores salen de las variables de marca.css. */
+    .encabezado-pregunta { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
     .contador { font-size: 13px; color: var(--tenue); font-variant-numeric: tabular-nums; }
     .progreso { margin-bottom: 28px; }
-    .progreso > span { width: 0; transition: width .25s ease; }
-    .enunciado { margin: 0 0 18px; font-size: 22px; font-weight: 600; line-height: 1.3; letter-spacing: -.01em; color: var(--texto); }
+    .progreso > span { transition: width .25s ease; }
+    .enunciado { margin: 16px 0 20px; font-size: 22px; font-weight: 600; line-height: 1.3; color: var(--texto); }
     .opcion:disabled { cursor: default; }
     .opcion:disabled:not(.correcta):not(.incorrecta) { color: var(--tenue); }
-    .opcion:disabled:hover:not(.correcta):not(.incorrecta) { border-color: var(--borde-fuerte); }
-    .explicacion { margin: 18px 0 0; padding: 16px 18px; border-radius: 12px; border: 1px solid var(--borde); background: var(--tarjeta-2); color: var(--cuerpo); }
+    .explicacion { margin: 20px 0 0; padding-top: 20px; border-top: 1px solid var(--borde); color: var(--cuerpo); }
     .explicacion strong { color: var(--texto); }
     .acciones { display: flex; justify-content: flex-end; margin-top: 24px; }
-    .resultado .cifra { font-size: clamp(56px, 12vw, 96px); line-height: 1; letter-spacing: -.03em; }
-    .resultado .cuerpo { margin: 12px 0 28px; }
+    .puntaje { font-size: clamp(56px, 12vw, 96px); line-height: 1; margin: 8px 0 16px; }
     [hidden] { display: none !important; }
   </style>
 </head>
@@ -29,30 +29,37 @@
   </header>
 
   <main class="contenedor">
-    <span class="eyebrow">Repaso N1, N2 y Taller</span>
+    <span class="eyebrow">Repaso N1 y N2</span>
     <h1 class="titulo">Quiz de repaso</h1>
 
-    <section id="quiz" class="tarjeta" aria-live="polite">
-      <div class="encabezado">
-        <span id="tema" class="eyebrow"></span>
-        <span id="contador" class="contador"></span>
+    <section id="quiz" aria-live="polite">
+      <div class="progreso" role="progressbar" aria-label="Progreso del quiz" aria-valuemin="0" aria-valuemax="100">
+        <span id="barra-progreso" style="width: 0%"></span>
       </div>
-      <div class="progreso" role="progressbar" aria-label="Progreso del quiz" aria-valuemin="0" id="barra-progreso">
-        <span id="relleno"></span>
-      </div>
-      <h2 id="pregunta" class="enunciado"></h2>
-      <div id="opciones"></div>
-      <p id="explicacion" class="explicacion" hidden></p>
-      <div class="acciones">
-        <button id="siguiente" class="boton" type="button" hidden>Siguiente</button>
-      </div>
+
+      <article class="tarjeta">
+        <div class="encabezado-pregunta">
+          <span class="eyebrow" id="tema"></span>
+          <span class="contador" id="contador"></span>
+        </div>
+        <h2 class="enunciado" id="pregunta"></h2>
+        <div id="opciones"></div>
+        <p class="explicacion" id="explicacion" hidden></p>
+        <div class="acciones">
+          <button type="button" class="boton" id="siguiente" hidden>Siguiente</button>
+        </div>
+      </article>
     </section>
 
-    <section id="resultado" class="tarjeta resultado" hidden aria-live="polite">
-      <span class="eyebrow">Tu puntaje</span>
-      <p style="margin: 16px 0 0;"><span id="puntaje" class="cifra"></span></p>
-      <p id="mensaje" class="cuerpo"></p>
-      <button id="reiniciar" class="boton" type="button">Jugar de nuevo</button>
+    <section id="resultado" hidden>
+      <article class="tarjeta">
+        <span class="eyebrow">Resultado</span>
+        <p class="puntaje"><span class="cifra" id="puntaje"></span></p>
+        <p class="cuerpo" id="mensaje-final"></p>
+        <div class="acciones">
+          <button type="button" class="boton" id="reiniciar">Jugar de nuevo</button>
+        </div>
+      </article>
     </section>
   </main>
 

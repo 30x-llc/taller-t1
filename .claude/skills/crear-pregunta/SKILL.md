@@ -1,56 +1,58 @@
 ---
 name: crear-pregunta
-description: Agrega una pregunta nueva al quiz de repaso en preguntas.js. Úsala cuando pidan agregar, crear o escribir preguntas para el quiz.
+description: Crea una pregunta nueva para el quiz de repaso de AI for Developers y la agrega a preguntas.js. Úsala cuando pidan agregar, crear o escribir preguntas para el quiz.
 ---
 
-# Crear una pregunta para el quiz
+# Crear pregunta para el quiz
 
 Sigue estos pasos en orden. Si piden varias preguntas, repite los pasos 2 a 4 por cada una y corre el paso 5 al final.
 
 ## 1. Lee preguntas.js para no repetir temas
 
-Lee `preguntas.js` completo. Fíjate en los `id`, el `tema` y lo que pregunta cada una. La pregunta nueva tiene que tratar un concepto que todavía no esté cubierto. Si el concepto ya existe, elige otro o pregúntale al usuario.
+Lee `preguntas.js` completo. Anota los `id` y los conceptos que ya cubren las preguntas. La pregunta nueva debe tratar un concepto distinto de N1, N2 o Taller. No sirve preguntar lo mismo con otras palabras.
 
-## 2. Escribe 1 opción correcta y 3 falsas
+## 2. Escribe la pregunta y sus 4 opciones
 
-- La opción correcta debe ser verdadera sin ambigüedad.
-- Basa las 3 opciones falsas en errores comunes de quien empieza: confusiones típicas, ideas que suenan razonables pero están mal, o conceptos vecinos que se mezclan. Nada de opciones absurdas o de relleno.
-- Las 4 opciones deben tener largo y estilo parecidos para que la correcta no se note.
-- Pon la correcta en una posición de 0 a 3 y no la dejes siempre en el mismo lugar. Revisa en qué posición quedaron las correctas de las preguntas que ya existen.
+- `pregunta`: una sola idea, clara, que termina en "?".
+- 1 opción correcta, precisa y sin ambigüedad.
+- 3 opciones falsas basadas en errores comunes de quien empieza con agentes y LLMs. Por ejemplo: creer que el modelo recuerda entre llamadas, que más contexto siempre es mejor, que un MCP hace falta aunque exista una CLI o que la skill carga completa desde el inicio.
+- Las 4 opciones deben tener largo y tono parecidos, para que la correcta no se note por la forma.
+- Evita "Todas las anteriores" y "Ninguna de las anteriores".
+- Cambia la posición de la correcta respecto de las últimas preguntas, para que no caiga siempre en el mismo índice.
 
 ## 3. Escribe la explicación
 
-- 140 caracteres o menos. Cuéntalos antes de guardar.
-- Explica por qué la correcta es correcta. Si queda espacio, di cuál es el error de las falsas.
+- `explicacion`: 140 caracteres o menos, contando espacios.
+- Di por qué la correcta es correcta. Si cabe, nombra el error de la opción falsa más tentadora.
+- Español neutro, con tú, sin emojis.
 
 ## 4. Agrega la pregunta al final de PREGUNTAS
 
-Agrégala como último elemento del arreglo `PREGUNTAS` en `preguntas.js`, con este formato:
+Agrégala como el último elemento del arreglo `PREGUNTAS` en `preguntas.js`. El arreglo es JSON estricto:
+
+- Comillas dobles en claves y textos.
+- Pon una coma después del `}` de la pregunta que antes era la última. No dejes coma después de la nueva.
+- `id` en kebab-case, único, con el tema como prefijo, por ejemplo `n2-hooks-cuando-corren`.
+- `tema`: `"N1"`, `"N2"` o `"Taller"`.
+- `correcta`: número de 0 a 3 que apunta a la opción correcta.
 
 ```json
 {
-  "id": "taller-ejemplo-en-kebab-case",
-  "tema": "Taller",
-  "pregunta": "¿Texto de la pregunta?",
+  "id": "n2-ejemplo",
+  "tema": "N2",
+  "pregunta": "¿...?",
   "opciones": [
-    "Opción 0",
-    "Opción 1",
-    "Opción 2",
-    "Opción 3"
+    "...",
+    "...",
+    "...",
+    "..."
   ],
   "correcta": 2,
-  "explicacion": "Explicación de 140 caracteres o menos."
+  "explicacion": "..."
 }
 ```
 
-Reglas:
-- `id` en kebab-case, único, que empiece por el tema (`n1-`, `n2-` o `taller-`).
-- `tema` es `N1`, `N2` o `Taller`.
-- `pregunta` termina en "?".
-- `opciones` tiene exactamente 4 textos.
-- `correcta` es un número de 0 a 3.
-- El arreglo es JSON estricto: comillas dobles y sin coma después del último elemento. Pon una coma después de la pregunta que antes era la última.
-- Español neutro, con tú, sin emojis.
+No edites `app.js`, `index.html` ni `marca/`.
 
 ## 5. Valida
 
@@ -60,4 +62,4 @@ Corre:
 node herramientas/validar-preguntas.mjs
 ```
 
-Si sale con errores, corrígelos y vuelve a correrlo hasta que diga que todas las preguntas están correctas. Al terminar, muéstrale al usuario la pregunta nueva y la opción correcta.
+Si reporta errores, corrígelos en `preguntas.js` y vuelve a correrlo hasta que diga que todas las preguntas son correctas. Al terminar, muestra al usuario la pregunta nueva, cuál opción es la correcta y el resultado del validador.
