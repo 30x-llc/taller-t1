@@ -1,0 +1,61 @@
+/* Design system de AI for Developers (30X), versión para el taller T1.
+   Sale de github.com/30x-llc/ai4devs-marca: negro puro, títulos en plata, lima solo como destello, Inter. */
+@font-face { font-family: "Inter"; font-weight: 400; src: url("fuentes/Inter-Regular.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("fuentes/Inter-SemiBold.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("fuentes/Inter-Bold.woff2") format("woff2"); }
+
+:root {
+  --negro: #000000;
+  --tarjeta: #0d0d0e;
+  --tarjeta-2: #151517;
+  --texto: #f5f5f7;
+  --cuerpo: #a1a1a6;
+  --tenue: #6e6e73;
+  --borde: rgba(255, 255, 255, .09);
+  --borde-fuerte: rgba(255, 255, 255, .18);
+  --lima: #e9ff7b;
+  --lima-hover: #f1ff9f;
+  --texto-sobre-lima: #0a0a0a;
+  --rojo: #ff8a7a;
+  --plata: linear-gradient(180deg, #ffffff 25%, #9a9aa0 100%);
+  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --radio: 16px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--negro); color: var(--texto); font: 16px/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+
+/* Barra con el logo: siempre el SVG, nunca "30X" escrito con texto. */
+.barra { display: flex; align-items: center; gap: 10px; padding: 18px 24px; border-bottom: 1px solid var(--borde); font-size: 13px; color: var(--tenue); }
+.barra img { height: 14px; width: auto; display: block; }
+
+.contenedor { max-width: 760px; margin: 0 auto; padding: 48px 20px; }
+
+/* Eyebrow: mayúsculas, 12 px, punto lima delante. */
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--cuerpo); }
+.eyebrow::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--lima); }
+
+/* Titulares en plata, 600, interletra negativa. */
+.titulo { margin: 12px 0 16px; font-size: clamp(32px, 6vw, 56px); font-weight: 600; line-height: 1.02; letter-spacing: -.035em; background: var(--plata); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cuerpo { color: var(--cuerpo); font-size: 18px; }
+.cifra { font-variant-numeric: tabular-nums; font-weight: 700; background: var(--plata); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.tarjeta { background: var(--tarjeta); border: 1px solid var(--borde); border-radius: var(--radio); padding: 28px; }
+
+/* Botón principal en lima; el secundario es un contorno. */
+.boton { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 999px; border: 0; background: var(--lima); color: var(--texto-sobre-lima); font: 600 16px var(--sans); cursor: pointer; }
+.boton:hover { background: var(--lima-hover); }
+.boton-secundario { background: transparent; color: var(--texto); border: 1px solid var(--borde-fuerte); }
+.boton-secundario:hover { background: var(--tarjeta-2); }
+
+/* Opciones de respuesta. */
+.opcion { display: block; width: 100%; text-align: left; margin: 10px 0; padding: 16px 18px; border-radius: 12px; border: 1px solid var(--borde-fuerte); background: var(--tarjeta-2); color: var(--texto); font: 16px/1.4 var(--sans); cursor: pointer; }
+.opcion:hover { border-color: var(--texto); }
+.opcion.correcta { border-color: var(--lima); box-shadow: inset 0 0 0 1px var(--lima); }
+.opcion.incorrecta { border-color: var(--rojo); color: var(--rojo); }
+
+.progreso { height: 4px; background: var(--borde); border-radius: 999px; overflow: hidden; }
+.progreso > span { display: block; height: 100%; background: var(--lima); }
+
+:focus-visible { outline: 2px solid var(--lima); outline-offset: 3px; }
